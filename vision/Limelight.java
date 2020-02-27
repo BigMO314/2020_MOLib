@@ -3,6 +3,9 @@ package frc.molib.vision;
 import frc.molib.DashTable;
 import frc.molib.DashTable.DashEntry;
 
+/**
+ * Interface for the Limelight table on NetworkTables
+ */
 public final class Limelight {
 	public enum LEDMode {
 		kDefault(0),
@@ -10,22 +13,16 @@ public final class Limelight {
 		kBlink(2),
 		kOn(3);
 
-		private final int VALUE;
-		public static final LEDMode[] VALUES = LEDMode.values();
-		private LEDMode(int value) { VALUE = value; }
-
-		public int getValue() { return VALUE; }
+		public final int value;
+		private LEDMode(int value) { this.value = value; }
 	}
 
 	public enum CamMode {
 		kVisionProcessor(0),
 		kDriverCam(1);
 		
-		private final int VALUE;
-		public static final CamMode[] VALUES = CamMode.values();
-		private CamMode(int value) { VALUE = value; }
-
-		public int getValue() { return VALUE; }
+		public final int value;
+		private CamMode(int value) { this.value = value; }
 	}
 
 	public enum StreamMode {
@@ -33,17 +30,8 @@ public final class Limelight {
 		kPrimaryPiP(1),
 		kSecondaryPiP(2);
 
-		private final int VALUE;
-		public static final StreamMode[] VALUES = StreamMode.values();
-		private StreamMode(int value){ VALUE = value; }
-
-		public int getValue() { return VALUE; }
-	}
-	
-	@Deprecated
-	public enum PIDAxis { 
-		HorizontalAxis, 
-		VerticalAxis; 
+		public final int value;
+		private StreamMode(int value){ this.value = value; }
 	}
 	
 	private static final DashTable TABLE = new DashTable("limelight");
@@ -61,7 +49,9 @@ public final class Limelight {
 	public static final DashEntry<Integer>	dshPipeline = TABLE.new DashEntry<Integer>("pipeline");
 	public static final DashEntry<Integer>	dshStreamMode = TABLE.new DashEntry<Integer>("stream");
 
-	private Limelight() {}
+	private Limelight() {
+
+	}
 
 	public static Limelight getInstance() { return INSTANCE; }
 
@@ -72,13 +62,13 @@ public final class Limelight {
 	public static int getHeight() { return dshHeight.get(); }
 	public static double getArea() { return dshArea.get(); }
 	
-	public static void setLEDMode(LEDMode mode) { dshLEDMode.set(mode.getValue()); }
-	public static void setCamMode(CamMode mode) { dshCamMode.set(mode.getValue()); }
+	public static void setLEDMode(LEDMode mode) { dshLEDMode.set(mode.value); }
+	public static void setCamMode(CamMode mode) { dshCamMode.set(mode.value); }
 	public static void setPipeline(int pipeline) { dshPipeline.set(pipeline); }
-	public static void setStream(StreamMode stream) { dshStreamMode.set(stream.getValue()); }
+	public static void setStream(StreamMode mode) { dshStreamMode.set(mode.value); }
 
-	public static LEDMode getLEDMode() { return LEDMode.VALUES[dshLEDMode.get()]; }
-	public static CamMode getCamMode() { return CamMode.VALUES[dshCamMode.get()]; }
+	public static LEDMode getLEDMode() { return LEDMode.values()[dshLEDMode.get()]; }
+	public static CamMode getCamMode() { return CamMode.values()[dshCamMode.get()]; }
 	public static int getPipeline() { return dshPipeline.get(); }
-	public static StreamMode getStreamMode() { return StreamMode.VALUES[dshStreamMode.get()]; }	
+	public static StreamMode getStreamMode() { return StreamMode.values()[dshStreamMode.get()]; }	
 }

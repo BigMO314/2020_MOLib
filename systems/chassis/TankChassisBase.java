@@ -10,7 +10,10 @@ import edu.wpi.first.wpilibj.SpeedController;
 import frc.molib.systems.SystemBase;
 
 
-
+/**
+ * An incomplete class to represent a modular Tank drivetrain.
+ * <p>Takes care of every form of standard drivetrain.</p>
+ */
 @SuppressWarnings("rawtypes")
 public abstract class TankChassisBase implements SystemBase {
 	protected interface Subsystem {

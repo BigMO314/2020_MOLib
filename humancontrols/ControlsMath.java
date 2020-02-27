@@ -1,6 +1,7 @@
 package frc.molib.humancontrols;
 
-final class ControlsMath {
+class ControlsMath {
+	private ControlsMath() { throw new AssertionError("Utitily Class"); }
 	public static double deaden(double value, double deadzoneThreshold) {
 		if (Math.abs(value) < deadzoneThreshold)
 			return 0.0;
