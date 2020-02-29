@@ -17,9 +17,10 @@ public class Button implements Sendable {
 	protected boolean lastPressed = grab();
 	protected boolean lastReleased = !grab();
 
-	public Button() {
+	public Button() { this(""); }
+	public Button(String label) {
 		instances++;
-		SendableRegistry.addLW(this, "Button", instances);
+		SendableRegistry.addLW(this, "Button " + label, instances);
 		new ButtonScheduler() {
 			@Override public void execute() {
 				if(grab() && !lastPressed) lastPressed = true;
