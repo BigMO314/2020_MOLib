@@ -3,7 +3,6 @@ package frc.molib.humancontrols.buttons;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
-import edu.wpi.first.wpilibj.buttons.Trigger.ButtonScheduler;
 
 /**
  * A non-command based Button class. 
@@ -11,42 +10,66 @@ import edu.wpi.first.wpilibj.buttons.Trigger.ButtonScheduler;
  * @see edu.wpi.first.wpilibj.buttons.Button
  */
 public class Button implements Sendable {
-	protected volatile boolean m_sendablePressed;
+	protected volatile boolean m_sendableValue;
 	private static int instances;
 
 	protected boolean lastPressed = grab();
 	protected boolean lastReleased = !grab();
 
-	public Button() { this(""); }
-	public Button(String label) {
+	public Button() { 
 		instances++;
-		SendableRegistry.addLW(this, "Button " + label, instances);
-		new ButtonScheduler() {
-			@Override public void execute() {
-				if(grab() && !lastPressed) lastPressed = true;
-				if(!grab() && !lastReleased) lastReleased = true;
-			}
-		}.start();
+		SendableRegistry.addLW(this, "Button", instances);
+		ButtonScheduler.getInstance().addButton(this);
+	}
+
+	public Button(String name) {
+		SendableRegistry.addLW(this, "Button[" + name + "]");
+		ButtonScheduler.getInstance().addButton(this);
+	}
+
+	public Button(String subsystem, String name) {
+		SendableRegistry.addLW(this, subsystem, "Button[" + name + "]");
+		ButtonScheduler.getInstance().addButton(this);
 	}
 	
-	public boolean get() { return m_sendablePressed; }
+	/**
+	 * Default implementation simply returns the LiveWindow 'pressed' value. Override this method to change how the value is read.
+	 * @return Whether the button reads pressed or not.
+	 */
+	public boolean get() { return m_sendableValue; }
+
+	/**
+	 * 
+	 * @return Whether the button has been pressed since the last time this method was called.
+	 */
 	public final boolean getPressed() {
 		boolean currentPressed = lastPressed;
 		lastPressed = false;
 		return currentPressed;
 	}
+
+	/**
+	 * 
+	 * @return Whether the button has been released since the last time this method was called.
+	 */
 	public final boolean getReleased() {
 		boolean currentReleased = lastReleased;
 		lastReleased = false;
 		return currentReleased;
 	}
 
-	private boolean grab() { return get() || m_sendablePressed; }
+	private boolean grab() { return get() || m_sendableValue; }
+
+	protected void update() {
+		if(grab() && !lastPressed) lastPressed = true;
+		if(!grab() && !lastReleased) lastReleased = true;
+	}
 
 	@Override
 	public void initSendable(SendableBuilder builder) {
-		builder.setSmartDashboardType("MOLib Button");
-		builder.setSafeState(() -> m_sendablePressed = false);
-		builder.addBooleanProperty("pressed", this::grab, value -> m_sendablePressed = value);
+		builder.setSafeState(() -> m_sendableValue = false);
+		builder.addBooleanProperty("value", this::grab, value -> m_sendableValue = value);
+		builder.addBooleanProperty("pressed", () -> lastPressed, null);
+		builder.addBooleanProperty("released", () -> lastReleased, null);
 	}
 }
