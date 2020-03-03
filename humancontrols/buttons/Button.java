@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 
 /**
  * A non-command based Button class. 
- * <p>Simply sub-class this and override the {@link #get()} method to determine how the button value is read</p>
+ * <p>Sub-class this and override the {@link #get()} method to determine how the button value is read.</p>
  * @see edu.wpi.first.wpilibj.buttons.Button
  */
 public class Button implements Sendable {
@@ -16,31 +16,47 @@ public class Button implements Sendable {
 	protected boolean lastPressed = grab();
 	protected boolean lastReleased = !grab();
 
+	protected boolean pressable = !grab();
+	protected boolean releasable = grab();
+
+	/**
+	 * Constructor
+	 * <p>Uses the default method of naming the Button</p>
+	 */
 	public Button() { 
 		instances++;
-		SendableRegistry.addLW(this, "Button", instances);
+		SendableRegistry.addLW(this, "Button[" + instances + "]");
 		ButtonScheduler.getInstance().addButton(this);
 	}
 
+	/**
+	 * Constructor
+	 * @param name Button name as it appears on the table.
+	 */
 	public Button(String name) {
 		SendableRegistry.addLW(this, "Button[" + name + "]");
 		ButtonScheduler.getInstance().addButton(this);
 	}
 
+	/**
+	 * Constructor
+	 * @param subsystem Subtable name containing the button.
+	 * @param name Button name as it appears in the table.
+	 */
 	public Button(String subsystem, String name) {
 		SendableRegistry.addLW(this, subsystem, "Button[" + name + "]");
 		ButtonScheduler.getInstance().addButton(this);
 	}
 	
 	/**
-	 * Default implementation simply returns the LiveWindow 'pressed' value. Override this method to change how the value is read.
-	 * @return Whether the button reads pressed or not.
+	 * Default implementation simply returns the LiveWindow 'value' property. Override this method to change how the value is read.
+	 * @return True when the LiveWindow 'value' reads true.
 	 */
 	public boolean get() { return m_sendableValue; }
 
 	/**
-	 * 
-	 * @return Whether the button has been pressed since the last time this method was called.
+	 * Check if the button has bee pressed.
+	 * @return True if the button has been pressed since the last time this method was called.
 	 */
 	public final boolean getPressed() {
 		boolean currentPressed = lastPressed;
@@ -49,8 +65,8 @@ public class Button implements Sendable {
 	}
 
 	/**
-	 * 
-	 * @return Whether the button has been released since the last time this method was called.
+	 * Check if the button has been released.
+	 * @return True if the button has been released since the last time this method was called.
 	 */
 	public final boolean getReleased() {
 		boolean currentReleased = lastReleased;
@@ -61,8 +77,11 @@ public class Button implements Sendable {
 	private boolean grab() { return get() || m_sendableValue; }
 
 	protected void update() {
-		if(grab() && !lastPressed) lastPressed = true;
-		if(!grab() && !lastReleased) lastReleased = true;
+		if(!grab()) pressable = true;
+		else releasable = true;
+
+		if(grab() && !lastPressed && pressable) { lastPressed = true; pressable = false; }
+		if(!grab() && !lastReleased && releasable) { lastReleased = true; releasable = false; }
 	}
 
 	@Override
