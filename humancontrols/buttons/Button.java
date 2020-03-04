@@ -19,6 +19,10 @@ public class Button implements Sendable {
 	protected boolean pressable = !grab();
 	protected boolean releasable = grab();
 
+	protected boolean lastGrab = grab();
+	protected boolean pressed = false;
+	protected boolean released = false;
+
 	/**
 	 * Constructor
 	 * <p>Uses the default method of naming the Button</p>
@@ -55,33 +59,38 @@ public class Button implements Sendable {
 	public boolean get() { return m_sendableValue; }
 
 	/**
-	 * Check if the button has bee pressed.
-	 * @return True if the button has been pressed since the last time this method was called.
+	 * Whether the button was pressed since the last check.
+	 * @return True if the button has been pressed.
 	 */
 	public final boolean getPressed() {
-		boolean currentPressed = lastPressed;
-		lastPressed = false;
-		return currentPressed;
+		if (pressed) {
+			pressed = false;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
-	 * Check if the button has been released.
-	 * @return True if the button has been released since the last time this method was called.
+	 * Whether the button has been released since the last check.
+	 * @return True if the button has been released.
 	 */
 	public final boolean getReleased() {
-		boolean currentReleased = lastReleased;
-		lastReleased = false;
-		return currentReleased;
+		if (released) {
+			released = false;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private boolean grab() { return get() || m_sendableValue; }
 
 	protected void update() {
-		if(!grab()) pressable = true;
-		else releasable = true;
+		boolean currentGrab = grab();
 
-		if(grab() && !lastPressed && pressable) { lastPressed = true; pressable = false; }
-		if(!grab() && !lastReleased && releasable) { lastReleased = true; releasable = false; }
+		if (currentGrab && !lastGrab) pressed = true;
+		if (!currentGrab && lastGrab) released = true;
 	}
 
 	@Override

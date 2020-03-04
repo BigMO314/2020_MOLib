@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 public class Dial {
 	private AnalogPotentiometer potSource;
 	private final int positions;
-	//private final double maxVoltage = 1.0; //TODO: Find real max voltage
 	
 	/**
 	 * Constructor
