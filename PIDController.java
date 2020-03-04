@@ -46,7 +46,7 @@ public class PIDController extends edu.wpi.first.wpilibj.controller.PIDControlle
 	public void initSendable(SendableBuilder builder) {
 		builder.setSmartDashboardType("MOLib PIDController");
 		builder.setSafeState(() -> enabled = false);
-		builder.addDoubleProperty("p", this::getP, this::setP);
+		builder.addDoubleProperty("P", this::getP, this::setP);
 		builder.addDoubleProperty("I", this::getI, this::setI);
 		builder.addDoubleProperty("D", this::getD, this::setD);
 		builder.addBooleanProperty("Enabled", this::isEnabled, value -> enabled = value);

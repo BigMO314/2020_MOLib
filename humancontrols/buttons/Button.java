@@ -90,7 +90,9 @@ public class Button implements Sendable {
 		boolean currentGrab = grab();
 
 		if (currentGrab && !lastGrab) pressed = true;
-		if (!currentGrab && lastGrab) released = true;
+        if (!currentGrab && lastGrab) released = true;
+        
+        lastGrab = grab();
 	}
 
 	@Override
