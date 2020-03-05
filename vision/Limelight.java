@@ -37,11 +37,11 @@ public final class Limelight {
 	private static final DashTable TABLE = new DashTable("limelight");
 	private static final Limelight INSTANCE = new Limelight();
 
-	public static final DashEntry<Boolean>	dshHasTarget = TABLE.new DashEntry<Boolean>("tv");
+	public static final DashEntry<Double>	dshHasTarget = TABLE.new DashEntry<Double>("tv");
 	public static final DashEntry<Double> 	dshPosX = TABLE.new DashEntry<Double>("tx");
 	public static final DashEntry<Double> 	dshPosY = TABLE.new DashEntry<Double>("ty");
-	public static final DashEntry<Integer> 	dshWidth = TABLE.new DashEntry<Integer>("thor");
-	public static final DashEntry<Integer> 	dshHeight = TABLE.new DashEntry<Integer>("tver");
+	public static final DashEntry<Double> 	dshWidth = TABLE.new DashEntry<Double>("thor");
+	public static final DashEntry<Double> 	dshHeight = TABLE.new DashEntry<Double>("tver");
 	public static final DashEntry<Double> 	dshArea = TABLE.new DashEntry<Double>("ta");
 	
 	public static final DashEntry<Integer>	dshLEDMode = TABLE.new DashEntry<Integer>("ledMode");
@@ -55,11 +55,11 @@ public final class Limelight {
 
 	public static Limelight getInstance() { return INSTANCE; }
 
-	public static boolean hasTarget() { return dshHasTarget.get(); }
+	public static boolean hasTarget() { return dshHasTarget.get() == 1; }
 	public static double getPosX() { return dshPosX.get(); }
 	public static double getPosY() { return dshPosY.get(); }
-	public static int getWidth() { return dshWidth.get(); }
-	public static int getHeight() { return dshHeight.get(); }
+	public static double getWidth() { return dshWidth.get(); }
+	public static double getHeight() { return dshHeight.get(); }
 	public static double getArea() { return dshArea.get(); }
 	
 	public static void setLEDMode(LEDMode mode) { dshLEDMode.set(mode.value); }
